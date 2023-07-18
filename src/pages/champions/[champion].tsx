@@ -4,7 +4,9 @@ import type { Champion } from '@/types';
 export async function getStaticProps(context: any) {
   const data = await getChampionData();
   const championName = context.params.champion;
-  const championData = data.find(({ name }) => name === championName);
+  const championData = data.find(
+    ({ name }) => name.toLowerCase() === championName
+  );
 
   return {
     props: {
@@ -17,7 +19,7 @@ export async function getStaticPaths() {
   const data = await getChampionData();
   const paths = data.map(({ name }) => {
     return {
-      params: { champion: name },
+      params: { champion: name.toLowerCase() },
     };
   });
 
