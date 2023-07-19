@@ -1,12 +1,26 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
-import type { Champion, MerakiChampion } from '../types';
+import type { Quote, Champion, MerakiChampion } from '../types';
 
 export default async function getChampionData(): Promise<Champion[]> {
   const filePath = path.join(process.cwd(), 'data.json');
   const jsonData = await fsPromises.readFile(filePath, 'utf-8');
-  const data = JSON.parse(jsonData) as Champion[];
-  return data;
+  const quoteData = JSON.parse(jsonData) as Quote[];
+  const merakiChampionData = await getMerakiChampionData();
+  const championData = combineChampionData(quoteData, merakiChampionData);
+  return championData;
+}
+
+function combineChampionData(
+  quoteData: Quote[],
+  merakiChampionData: MerakiChampion[]
+): Champion[] {
+  return merakiChampionData.map((merakiChampion, i) => {
+    return {
+      quotes: quoteData[i].quotes,
+      ...merakiChampion,
+    };
+  });
 }
 
 async function getMerakiChampionData(): Promise<MerakiChampion[]> {
