@@ -1,12 +1,16 @@
-export type Champion = {
+export type Quote = {
   name: string;
-  quotes: Quote[];
+  quotes: QuoteInfo[];
 };
 
-type Quote = {
+type QuoteInfo = {
   quote: string;
   url: string;
 };
+
+export type Champion = {
+  quotes: QuoteInfo[];
+} & MerakiChampion;
 
 export type MerakiChampion = {
   id: number;
