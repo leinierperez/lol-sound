@@ -1,6 +1,6 @@
 import fsPromises from 'fs/promises';
 import path from 'path';
-import type { Quote, Champion, MerakiChampion } from '../types';
+import type { Champion, MerakiChampion, Quote } from '../types';
 
 export default async function getChampionData(): Promise<Champion[]> {
   const filePath = path.join(process.cwd(), 'data.json');

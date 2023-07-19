@@ -1,5 +1,5 @@
-import getChampionData from '@/utils/getChampionData';
 import type { Champion } from '@/types';
+import getChampionData from '@/utils/getChampionData';
 
 export async function getStaticProps(context: any) {
   const data = await getChampionData();
@@ -30,5 +30,19 @@ export async function getStaticPaths() {
 }
 
 export default function Champion({ championData }: { championData: Champion }) {
-  return <div>{championData.name}</div>;
+  return (
+    <div>
+      {championData.quotes.map(({ quote, url }) => {
+        return (
+          <div key={quote + url}>
+            <h1>{championData.name}</h1>
+            <div>
+              <p>{quote}</p>
+              <audio controls src={url} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
