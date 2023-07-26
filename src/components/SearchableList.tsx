@@ -20,15 +20,13 @@ function SearchableList<T extends {}>({
 
   return (
     <Fragment>
-      {(queriedData.length > 0 || query.length > 0 ? queriedData : data).map(
-        (item) => {
-          return (
-            <li className="list-none" key={keyExtractor(item)}>
-              {renderItem(item)}
-            </li>
-          );
-        }
-      )}
+      {queriedData.map((item) => {
+        return (
+          <li className="list-none" key={keyExtractor(item)}>
+            {renderItem(item)}
+          </li>
+        );
+      })}
     </Fragment>
   );
 }
