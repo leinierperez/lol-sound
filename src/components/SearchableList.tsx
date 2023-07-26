@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 type Props<T> = {
   query: string;
   data: T[];
-  keyToSearch: string;
+  keyToSearch: string[];
   renderItem: (item: T) => React.ReactNode;
   keyExtractor: (item: T) => string;
 };
@@ -22,7 +22,11 @@ function SearchableList<T extends {}>({
     <Fragment>
       {(queriedData.length > 0 || query.length > 0 ? queriedData : data).map(
         (item) => {
-          return <li key={keyExtractor(item)}>{renderItem(item)}</li>;
+          return (
+            <li className="list-none" key={keyExtractor(item)}>
+              {renderItem(item)}
+            </li>
+          );
         }
       )}
     </Fragment>
