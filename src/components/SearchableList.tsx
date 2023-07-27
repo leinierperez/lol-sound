@@ -5,8 +5,9 @@ type Props<T> = {
   query: string;
   data: T[];
   keyToSearch: string[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
   keyExtractor: (item: T) => string;
+  visibleItems?: number;
 };
 
 function SearchableList<T extends {}>({
@@ -15,15 +16,16 @@ function SearchableList<T extends {}>({
   renderItem,
   keyToSearch,
   keyExtractor,
+  visibleItems,
 }: Props<T>) {
-  const queriedData = useFuzzySearch(query, keyToSearch, data);
+  const queriedData = useFuzzySearch(query, keyToSearch, data, visibleItems);
 
   return (
     <Fragment>
-      {queriedData.map((item) => {
+      {queriedData.slice(0, visibleItems).map((item, i) => {
         return (
           <li className="list-none" key={keyExtractor(item)}>
-            {renderItem(item)}
+            {renderItem(item, i)}
           </li>
         );
       })}
