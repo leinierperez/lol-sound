@@ -8,9 +8,15 @@ function useFuzzySearch<T>(
 ) {
   const results = fuzzysort.go(query, data, {
     all: true,
-    threshold: -10000,
-    keys,
+    threshold: -9999,
     limit: visibleItems,
+    keys,
+    scoreFn: (a) => {
+      return Math.max(
+        a[0] ? a[0].score : -10000,
+        a[1] ? a[1].score - 100 : -10000
+      );
+    },
   });
   return results.map((r) => r.obj);
 }
