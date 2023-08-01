@@ -1,6 +1,7 @@
 import InfiniteScroller from '@/components/InfiniteScroller';
 import List from '@/components/List';
 import Quote from '@/components/Quote';
+import { spiegel } from '@/fonts/Spiegel-OTF/Spiegel';
 import useFuzzySearch from '@/hooks/useFuzzySearch';
 import { shuffle } from '@/utils/arrays';
 import getChampionData from '@/utils/getChampionData';
@@ -12,13 +13,20 @@ type QuoteData = {
   icon: string;
   quote: string;
   url: string;
+  skin: string;
 };
 
 export async function getStaticProps() {
   const data = await getChampionData();
   const championData: QuoteData[] = shuffle(
-    data.flatMap(({ name, icon, quotes }) => {
-      return quotes.map(({ quote, url }) => ({ name, icon, quote, url }));
+    data.flatMap(({ name, icon, quotes, skins }) => {
+      return quotes.map(({ quote, url }) => ({
+        name,
+        icon,
+        quote,
+        url,
+        skin: skins[0].tilePath,
+      }));
     })
   );
 
@@ -42,11 +50,13 @@ export default function Home({
   );
 
   return (
-    <div>
+    <section className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar">
       <input
-        className="text-black sticky"
+        className={`${spiegel.variable} text-gray-100 text-lg sticky top-0 z-10 bg-gold py-3 rounded-md outline-none font-semibold tracking-wider mx-4 text-center
+        placeholder-gray-300`}
         type="text"
         value={query}
+        placeholder="Search quotes..."
         onChange={(e) => setQuery(e.target.value)}
       />
       <InfiniteScroller
@@ -60,17 +70,18 @@ export default function Home({
         <List
           items={queriedData.slice(0, visibleItems)}
           keyExtractor={({ name, quote, url }) => name + quote + url}
-          className="grid grid-cols-3 gap-4"
-          renderItem={({ name, icon, quote, url }, i) => (
+          className="grid gap-4 auto-rows-fr sm:grid-cols-2 px-4 xl:grid-cols-3"
+          renderItem={({ name, icon, quote, url, skin }, i) => (
             <Quote
               quote={quote}
               champName={name}
               champIcon={icon}
               quoteAudioURL={url}
+              skin={skin}
             />
           )}
         />
       </InfiniteScroller>
-    </div>
+    </section>
   );
 }
