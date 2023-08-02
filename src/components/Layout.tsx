@@ -1,3 +1,4 @@
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { Metadata } from 'next';
 import Head from 'next/head';
@@ -16,6 +17,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </Head>
       <Header />
       <main className="min-h-screen max-w-screen-2xl mx-auto">{children}</main>
+      <Footer />
     </>
   );
 }
