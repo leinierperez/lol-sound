@@ -1,8 +1,8 @@
 import InfiniteScroller from '@/components/InfiniteScroller';
 import List from '@/components/List';
 import Quote from '@/components/Quote';
+import SearchInput from '@/components/SearchInput';
 import VolumeSlider from '@/components/VolumeSlider';
-import { spiegel } from '@/fonts/Spiegel-OTF/Spiegel';
 import useFuzzySearch from '@/hooks/useFuzzySearch';
 import { VolumeProvider } from '@/hooks/useVolume';
 import { shuffle } from '@/utils/arrays';
@@ -66,17 +66,7 @@ export default function Home({
         className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar"
       >
         <div className="flex flex-col sm:flex-row sticky top-0 z-10 px-4 items-center">
-          <input
-            className={`
-            ${spiegel.variable} text-gray-100 bg-gold py-3 rounded-tl-md 
-            rounded-bl-md outline-none font-semibold tracking-wider text-center 
-            placeholder-gray-300 flex-1
-            `}
-            type="text"
-            value={query}
-            placeholder="Search quotes..."
-            onChange={handleChange}
-          />
+          <SearchInput query={query} handleChange={handleChange} />
           <VolumeSlider />
         </div>
         <InfiniteScroller
