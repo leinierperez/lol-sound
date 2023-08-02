@@ -1,9 +1,3 @@
-import localFont from 'next/font/local';
-
-const myFont = localFont({
-  src: '../fonts/BeaufortForLoL-OTF/BeaufortforLOL-Bold.otf',
-});
-
 import { spiegel } from '@/fonts/Spiegel-OTF/Spiegel';
 
 const Footer = () => {
