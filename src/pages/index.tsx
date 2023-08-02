@@ -6,7 +6,7 @@ import useFuzzySearch from '@/hooks/useFuzzySearch';
 import { shuffle } from '@/utils/arrays';
 import getChampionData from '@/utils/getChampionData';
 import { InferGetStaticPropsType } from 'next';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 type QuoteData = {
   name: string;
@@ -48,16 +48,27 @@ export default function Home({
     championData,
     visibleItems
   );
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+    containerRef.current?.scrollTo({ top: 0, behavior: 'instant' });
+    const newVisibleItems = visibleItems === 90 ? visibleItems : 90;
+    setVisibleItems(newVisibleItems);
+  };
 
   return (
-    <section className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar">
+    <section
+      ref={containerRef}
+      className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar"
+    >
       <input
         className={`${spiegel.variable} text-gray-100 text-lg sticky top-0 z-10 bg-gold py-3 rounded-md outline-none font-semibold tracking-wider mx-4 text-center
         placeholder-gray-300`}
         type="text"
         value={query}
         placeholder="Search quotes..."
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
       />
       <InfiniteScroller
         loadMore={() => {
