@@ -1,8 +1,10 @@
 import InfiniteScroller from '@/components/InfiniteScroller';
 import List from '@/components/List';
 import Quote from '@/components/Quote';
+import VolumeSlider from '@/components/VolumeSlider';
 import { spiegel } from '@/fonts/Spiegel-OTF/Spiegel';
 import useFuzzySearch from '@/hooks/useFuzzySearch';
+import { VolumeProvider } from '@/hooks/useVolume';
 import { shuffle } from '@/utils/arrays';
 import getChampionData from '@/utils/getChampionData';
 import { InferGetStaticPropsType } from 'next';
@@ -58,41 +60,49 @@ export default function Home({
   };
 
   return (
-    <section
-      ref={containerRef}
-      className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar"
-    >
-      <input
-        className={`${spiegel.variable} text-gray-100 text-lg sticky top-0 z-10 bg-gold py-3 rounded-md outline-none font-semibold tracking-wider mx-4 text-center
-        placeholder-gray-300`}
-        type="text"
-        value={query}
-        placeholder="Search quotes..."
-        onChange={handleChange}
-      />
-      <InfiniteScroller
-        loadMore={() => {
-          setVisibleItems((prevVisibleItems) => prevVisibleItems + 50);
-        }}
-        loader={<p>Loading...</p>}
-        rootMargin="200px"
-        hasMore={queriedData.length >= visibleItems}
+    <VolumeProvider>
+      <section
+        ref={containerRef}
+        className="flex flex-col gap-4 max-h-screen overflow-y-auto no-scrollbar"
       >
-        <List
-          items={queriedData.slice(0, visibleItems)}
-          keyExtractor={({ name, quote, url }) => name + quote + url}
-          className="grid gap-4 auto-rows-fr sm:grid-cols-2 px-4 xl:grid-cols-3"
-          renderItem={({ name, icon, quote, url, skin }, i) => (
-            <Quote
-              quote={quote}
-              champName={name}
-              champIcon={icon}
-              quoteAudioURL={url}
-              skin={skin}
-            />
-          )}
-        />
-      </InfiniteScroller>
-    </section>
+        <div className="flex flex-col sm:flex-row sticky top-0 z-10 px-4 items-center">
+          <input
+            className={`
+            ${spiegel.variable} text-gray-100 bg-gold py-3 rounded-tl-md 
+            rounded-bl-md outline-none font-semibold tracking-wider text-center 
+            placeholder-gray-300 flex-1
+            `}
+            type="text"
+            value={query}
+            placeholder="Search quotes..."
+            onChange={handleChange}
+          />
+          <VolumeSlider />
+        </div>
+        <InfiniteScroller
+          loadMore={() => {
+            setVisibleItems((prevVisibleItems) => prevVisibleItems + 50);
+          }}
+          loader={<p>Loading...</p>}
+          rootMargin="200px"
+          hasMore={queriedData.length >= visibleItems}
+        >
+          <List
+            items={queriedData.slice(0, visibleItems)}
+            keyExtractor={({ name, quote, url }) => name + quote + url}
+            className="grid gap-4 auto-rows-fr sm:grid-cols-2 px-4 xl:grid-cols-3"
+            renderItem={({ name, icon, quote, url, skin }, i) => (
+              <Quote
+                quote={quote}
+                champName={name}
+                champIcon={icon}
+                quoteAudioURL={url}
+                skin={skin}
+              />
+            )}
+          />
+        </InfiniteScroller>
+      </section>
+    </VolumeProvider>
   );
 }
