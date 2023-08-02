@@ -1,8 +1,10 @@
+import { useVolume } from '@/hooks/useVolume';
 import { ElementRef, useEffect, useState } from 'react';
 
 function useSound() {
   const [audio, setAudio] = useState<ElementRef<'audio'> | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const { volume } = useVolume();
 
   useEffect(() => {
     setAudio(new Audio());
@@ -23,6 +25,11 @@ function useSound() {
       }
     };
   }, [audio]);
+
+  useEffect(() => {
+    if (!audio) return;
+    audio.volume = volume;
+  }, [audio, volume]);
 
   const play = (src: string) => {
     if (!audio) return;
