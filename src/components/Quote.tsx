@@ -99,7 +99,7 @@ function Quote({ quote, champName, quoteAudioURL, skin }: Props) {
         )}
         <div>
           <p
-            className={`${spiegel.variable} line-clamp-3 text-xl text- font-spiegel`}
+            className={`${spiegel.variable} line-clamp-3 text-xl font-spiegel`}
           >
             {quote}
           </p>
