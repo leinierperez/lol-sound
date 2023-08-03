@@ -1,21 +1,21 @@
 import { useVolume } from '@/hooks/useVolume';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 const VolumeSlider = () => {
   const { volume, updateVolume } = useVolume();
   const [debouncedVolume, setDebouncedVolume] = useState(volume);
-  let debounceTimeout: NodeJS.Timeout | null = null;
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(event.target.value);
     setDebouncedVolume(newVolume);
-    if (debounceTimeout !== null) {
-      clearTimeout(debounceTimeout);
+    if (debounceTimeoutRef.current !== null) {
+      clearTimeout(debounceTimeoutRef.current);
     }
-    debounceTimeout = setTimeout(() => {
+    debounceTimeoutRef.current = setTimeout(() => {
       updateVolume(newVolume);
-      debounceTimeout = null;
-    }, 200);
+      debounceTimeoutRef.current = null;
+    }, 1);
   };
 
   return (
